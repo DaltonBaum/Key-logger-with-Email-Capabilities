@@ -21,7 +21,7 @@ def send_mail():
     msg['To'] = toaddr
     msg['Subject'] = subject
 
-    body = "Logging has commenced!"
+    body = "Logging has commenced!"  #<---- whatever message you want here...
     # attach as a mime text part
     msg.attach(MIMEText(body, "plain"))
 
