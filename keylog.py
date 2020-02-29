@@ -44,7 +44,6 @@ def send_mail():
     server.login(fromaddr, "password")  # <-----input a password here
 
     server.sendmail(fromaddr, toaddr, text)
-    print("sent!")
     server.quit()
 # if no name it gets put into an empty string
 log_dir = " "
