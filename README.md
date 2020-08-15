@@ -4,4 +4,3 @@ A typical key logger that saves to a text file and emails back the information l
 
 !!!you need to install pynput with the "pip3 install pynput" command!!!
 
-run in a terminal
