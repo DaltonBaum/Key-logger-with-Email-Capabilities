@@ -2,5 +2,5 @@
 A typical key logger that saves to a text file and emails back the information logged.
 
 
-!!!you need to install pynput with the "pip3 install pynput" command!!!
+Make sure to install pynput!
 
